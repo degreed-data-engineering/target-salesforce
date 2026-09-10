@@ -10,9 +10,12 @@ keywords = [
 license = "Apache 2.0"
 
 [tool.poetry.dependencies]
-python = "<3.11,>=3.7.1"
+python = ">=3.9.2,<3.13"
 requests = "^2.32.4"
-singer-sdk = "^0.24.0"
+# singer-sdk 0.48.x is the last line supporting Python 3.9; it drops the cryptography<4 cap
+# that kept CVE-2023-50782 (cryptography 3.4.8) in this tap's venv (PD-132295).
+singer-sdk = "^0.48.1"
+cryptography = "^44.0.1"
 simple-salesforce = "^1.12.3"
 
 [tool.poetry.dev-dependencies]
