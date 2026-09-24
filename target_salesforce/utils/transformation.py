@@ -1,5 +1,6 @@
 """Converts python datetimes back to strings so the record is JSON Serializable"""
 
+from decimal import Decimal
 from typing import Dict
 
 
@@ -19,6 +20,10 @@ def transform_record(record: Dict, object_fields: Dict):
             transformed_record[field] = value.strftime(DATE_FORMAT)
         elif object_type == "datetime":
             transformed_record[field] = value.strftime(DATETIME_FORMAT)
+        elif isinstance(value, Decimal):
+            # singer-sdk 0.40+ parses JSON numbers as Decimal; cast to float
+            # so simple_salesforce's json.dumps() can serialize them
+            transformed_record[field] = float(value)
         else:
             transformed_record[field] = value
 
